@@ -34,6 +34,24 @@ impl Set {
             println!("Question: {}, Answer: {}", question, answer)
         }
     }
+
+    fn quiz(&self) -> f32 {
+        let mut correct_answers = 0;
+
+        for (question, answer) in self.card_list.iter() {
+            println!("{}", question);
+            let answer_input = get_stdin().unwrap();
+            if &answer_input == answer {
+                println!("Correct!");
+                correct_answers += 1;
+            }
+            else {
+                println!("Incorrect!")
+            }
+        }
+
+        ((correct_answers / self.card_list.len()) * 100) as f32
+    }
 }
 
 fn get_stdin() -> Result<String, io::Error> {
@@ -47,13 +65,16 @@ fn get_stdin() -> Result<String, io::Error> {
     }
     input.pop(); // remove trailing new line
 
-    Ok(input) // finally return once we have a valid String
+    Ok(input) // finally return a valid String
 }
 
 fn main() {
     let mut card_set: Set = Set::new(String::from("My Set"));
+
     let question: String = get_stdin().unwrap();
     let answer: String = get_stdin().unwrap();
+
     card_set.add_card(&question, &answer);
-    card_set.display_questions_and_answers();
+    
+    println!("{}%", card_set.quiz().to_string());
 }
