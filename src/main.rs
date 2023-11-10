@@ -39,10 +39,15 @@ impl Set {
 fn get_stdin() -> Result<String, io::Error> {
     let mut input = String::new();
 
-    io::stdin().read_line(&mut input)?;
-    input.pop();
+    loop {
+       match io::stdin().read_line(&mut input) {
+        Ok(_) => { break }
+        Err(_) => eprintln!("There was an error, please try again...")
+       }
+    }
+    input.pop(); // remove trailing new line
 
-    Ok(input)
+    Ok(input) // finally return once we have a valid String
 }
 
 fn main() {
@@ -50,6 +55,5 @@ fn main() {
     let question: String = get_stdin().unwrap();
     let answer: String = get_stdin().unwrap();
     card_set.add_card(&question, &answer);
-    card_set.remove_card("What's my name?");
     card_set.display_questions_and_answers();
 }
